@@ -7,12 +7,18 @@ PREFIX  = /usr/local
 MANDIR  = $(PREFIX)/share/man
 
 CC      = gcc
-CFLAGS  = -Wall -ansi -pedantic 
+CFLAGS  = -Wall -ansi -pedantic  -ggdb -g
 CFLAGS += -Wno-long-long
 CFLAGS += $(shell $(MY_CONFIG) --include)
+CFLAGS += -DUSE_INTERFACE=1 \
+          -DSTANDALONE=0 \
+          -DUSE_MATH=1 \
+          -DOSX=1 \
+          -DUSE_DL=1 \
+          -DUSE_ERROR_HOOK=1 \
+          -DUSE_ASCII=1
 LFLAGS  = 
 LFLAGS += $(shell $(MY_CONFIG) --libs)
-#LFLAGS += -lrt
 
 INC     = 
 SRC     = 
@@ -29,7 +35,7 @@ clean:
 	rm -f $(OBJ) tsx_mysql.so
 
 tsx_mysql.so: tsx_mysql.c 
-	$(CC) $(CFLAGS) -shared -Wall -fPIC -DUSE_DL=1  -o $@ $(DEBUG) $< $(LFLAGS)
+	$(CC) $(CFLAGS) -shared -Wall -fPIC  -o $@ $(DEBUG) $< $(LFLAGS)
 
 .PHONY: default clean test all install install-man uninstall 
 
