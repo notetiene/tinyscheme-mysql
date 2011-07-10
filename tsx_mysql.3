@@ -1,0 +1,33 @@
+.\" groff -man -Tascii tsx_mysql.3 | less
+.TH tsx_mysql 3 
+.SH "NAME"
+tsx_mysql.so \- a mysql extension for tiny scheme
+.SH "SYNOPSIS"
+.B
+(load-extension "tsx_mysql")
+.IP
+Load the MySQL extension into the tiny scheme environment.
+.PP
+.B (mysql-connect \fIhostname username password database\fR)
+.IP
+Connect to a MySQL database. This function takes four
+string arguments: hostname, username, password, database.
+.PP
+.B (mysql-disconnect)
+.IP
+Disconnect from a MySQL database.
+.PP
+.B (mysql-query \fIsql\fR)
+.IP
+Query a MySQL database. This function takes a string containing SQL statements.
+The query results will be returned as a list of strings.
+.PP
+.B (mysql-error)
+.IP
+Returns the current MySQL error string.
+.SH "FILES"
+.B
+tsx_mysql.so
+.SH "ENVIRONMENT"
+.SH "AUTHOR"
+
