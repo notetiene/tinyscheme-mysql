@@ -1,7 +1,7 @@
-/* MySQL extension for TinyScheme 
+/* 
+ * MySQL extension for TinyScheme 
  *
- * Copyright (C) 2011   A. Carl Douglas
- *
+ * Copyright (C) 2011   A. Carl Douglas  (carl.douglas@gmail.com)
  *
  */
 #include <stdio.h>
@@ -45,6 +45,8 @@ static pointer foreign_connect(scheme *sc, pointer args)
   db   = sc->vptr->string_value(sc_arg[3]);
 
   conn = mysql_init(NULL);
+  if (conn == NULL)
+    return sc->F;
   mysql_real_connect(conn, host, user, pass, db, 0, NULL, 0);
   return sc->T;
 }
@@ -65,26 +67,35 @@ static pointer foreign_query(scheme *sc, pointer args)
 
   value = sc->NIL;
   arg = sc->vptr->pair_car(args);
-  if (!sc->vptr->is_string(arg)) return sc->F;
+  if (!sc->vptr->is_string(arg)) 
+    return sc->F;
   sql = sc->vptr->string_value(arg);
 
   rc = mysql_query(conn, sql);
-  if (rc != 0) return sc->F;
+  if (rc != 0) 
+    return sc->F;
 
   result = mysql_store_result(conn);
   if (result) {
     MYSQL_ROW row;
-    int num_fields;
-    int i;
+    int num_fields = 0;
+    int num_rows = 0;
+    int i = 0;
+    int row_index = 0;
+
     num_fields = mysql_num_fields(result);
-    while ((row = mysql_fetch_row(result))) {
+    num_rows = mysql_num_rows(result);
+
+    value = sc->vptr->mk_vector(sc, num_rows);
+
+    for (row_index = 0; (row = mysql_fetch_row(result)) ; row_index++) {
       pointer sc_row = sc->NIL;
       for (i = (num_fields-1); i >= 0; i--) {
         pointer sc_field;
         sc_field = sc->vptr->mk_string(sc, row[i]);
         sc_row   = sc->vptr->cons(sc, sc_field, sc_row);
       }
-      value = sc->vptr->cons(sc, sc_row, value);
+      sc->vptr->set_vector_elem(value, row_index, sc_row);
     }
     mysql_free_result(result);
   } else {
@@ -116,7 +127,7 @@ static pointer foreign_error(scheme *sc, pointer args)
   if (myerr) 
     result = sc->vptr->mk_string(sc, myerr);
   else
-    result = sc->vptr->mk_string(sc, "*** no error message ***");
+    result = sc->F;
 
   return result; 
 }

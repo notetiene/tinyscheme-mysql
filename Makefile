@@ -37,5 +37,8 @@ clean:
 tsx_mysql.so: tsx_mysql.c 
 	$(CC) $(CFLAGS) -shared -Wall -fPIC  -o $@ $(DEBUG) $< $(LFLAGS)
 
+help:
+	groff -man -Tascii tsx_mysql.1 | less
+
 .PHONY: default clean test all install install-man uninstall 
 

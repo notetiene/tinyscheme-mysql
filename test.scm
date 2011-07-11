@@ -14,7 +14,8 @@
     (let ((result (mysql-query sql)))
       (if result
         (display result)
-        (display (mysql-error))))))
+        (display (mysql-error))))
+    (newline)))
 
 (if (mysql-connect "" "" "" "")
     (for-each run-query queries)
