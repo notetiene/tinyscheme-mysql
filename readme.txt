@@ -1,6 +1,6 @@
 <beginning of page>
 
-tsx_mysql(3)  tsx_mysql(3)
+tsx_mysql(1) API Reference tsx_mysql(1)
 NAME 
  tsx_mysql.so <-> a mysql extension for tiny scheme
 SYNOPSIS 
@@ -19,6 +19,6 @@ SYNOPSIS
  Returns the current MySQL error string.
 FILES 
  tsx_mysql.so
-ENVIRONMENT 
 AUTHOR 
-  tsx_mysql(3)
+ A. Carl Douglas (carl.douglas@gmail.com)
+tsx_mysql.so 11 July 2011 tsx_mysql(1)
